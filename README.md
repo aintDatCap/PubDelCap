@@ -1,0 +1,2 @@
+# PubDelCap
+See [LICENCE](LICENCE)
