@@ -1,19 +1,24 @@
 package menu;
 
+import menu.entries.OrderEntry;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
     private int table;
-    private List<String> food;
-    private List<String> drinks;
+    private List<OrderEntry> orders;
 
-    public Order(int table, List<String> food, List<String> drinks) {
+    public Order(int table) {
         this.table = table;
-        this.food = food;
-        this.drinks = drinks;
+        this.orders = new ArrayList<>();
     }
 
-    public double totalPrice() {
-        return 0; // TODO
+    public double getTotalPrice() {
+        double price = 0;
+        for(OrderEntry order:orders) {
+            price += order.quantity * order.menuEntry.price;
+        }
+        return price;
     }
 }
