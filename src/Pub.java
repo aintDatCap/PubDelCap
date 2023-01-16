@@ -3,22 +3,22 @@ import menu.exceptions.TableDoesNotExistException;
 import menu.exceptions.TableIsAlreadyOccupiedException;
 import menu.exceptions.TableIsNotOccupiedException;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 
 
 public class Pub {
-    private int totalTables = 25;
     private final boolean[] tables; // if the table is occupied, then it is true
     private List<Order>[] orders;
 
 
     public Pub(boolean isSummer) {
+        int totalTables = 25;
         if(isSummer)
             totalTables +=15;
         tables = new boolean[totalTables];
-
+        orders = new ArrayList[totalTables];
     }
 
     public boolean isTableOccupied(int tableNumber) throws TableDoesNotExistException {
