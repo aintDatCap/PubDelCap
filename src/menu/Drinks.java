@@ -1,7 +1,7 @@
 package menu;
 
 public class Drinks {
-    private static String[] beers = {"Abbazia","Ale","Altbier","APA(American Pale Ale)","IPA(Indian Pale Ale)","Blanche-Witbier","Bock","Kölsch","Lager","Lambic","Pils","Porter","Roggenbier","Strong Ale","Stout","Trappista","Weissbier"};
+    public static String[] beers = {"Abbazia","Ale","Altbier","APA(American Pale Ale)","IPA(Indian Pale Ale)","Blanche-Witbier","Bock","Kölsch","Lager","Lambic","Pils","Porter","Roggenbier","Strong Ale","Stout","Trappista","Weissbier"};
     private static String[][] wines = {
             {"Chardonnay","Sauvignon","Moscato Bianco","Moscato Giallo","Monferrato"},
             {"Barbera","Nebbiolo","Grignolino","Doux d’Henry","Brachetto","Barolo"}
