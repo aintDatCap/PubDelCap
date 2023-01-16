@@ -64,14 +64,4 @@ public class Pub {
 
         }
     }
-
-    @Override
-    public String toString() {
-        return "Pub{" +
-                "totalTables=" + totalTables +
-                ", tables=" + Arrays.toString(tables) +
-                ", orders=" + Arrays.toString(orders) +
-                ", status=" + Arrays.toString(status) +
-                '}';
-    }
 }

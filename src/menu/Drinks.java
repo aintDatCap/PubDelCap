@@ -1,13 +1,51 @@
 package menu;
 
-public class Drinks {
-    public static String[] beers = {"Abbazia","Ale","Altbier","APA(American Pale Ale)","IPA(Indian Pale Ale)","Blanche-Witbier","Bock","Kölsch","Lager","Lambic","Pils","Porter","Roggenbier","Strong Ale","Stout","Trappista","Weissbier"};
-    private static String[][] wines = {
-            {"Chardonnay","Sauvignon","Moscato Bianco","Moscato Giallo","Monferrato"},
-            {"Barbera","Nebbiolo","Grignolino","Doux d’Henry","Brachetto","Barolo"}
-    };
 
-    private static String[] softDrinks = {"coca cola","sprite","fanta","chinotto","succo di frutta","tè"};
-    private static String[] postMeal = {"caffè","rum","grappa"};
-    private static String[] alchoolics = {"Mojito","White Russian","Cuba Libre","Margarita","Bloody Mary", "Hugo","Spritz","Moscow Mule","Sex on the beach","Negroni"};
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.*;
+
+public class Drinks {
+    private static HashMap<String, List<MenuEntry>> drinks;
+
+    public Drinks(FileInputStream file) throws IOException {
+        Properties properties = new Properties();
+        properties.load(file);
+
+        try {
+            for(String key: properties.stringPropertyNames()) {
+                drinks.put(key, (List<MenuEntry>) properties.get(key));
+            }
+        } catch (ClassCastException exception) {
+            drinks = new HashMap<>();
+        }
+
+    }
+
+    public void saveDrinks(FileOutputStream file) throws IOException {
+        Properties properties = new Properties();
+
+        for(Map.Entry<String, List<MenuEntry>> entry: drinks.entrySet()) {
+            properties.put(entry.getKey(), entry.getValue());
+        }
+
+        properties.store(file, null);
+    }
+
+    public void addCategory(String categoryName) {
+        if(drinks.containsKey(categoryName))
+            return;
+        drinks.put(categoryName, new ArrayList<>());
+    }
+
+    public void addEntry(String categoryName, MenuEntry entry) {
+        drinks.get(categoryName).add(entry);
+    }
+
+    public static void main(String[] args) {
+
+    }
 }
+
