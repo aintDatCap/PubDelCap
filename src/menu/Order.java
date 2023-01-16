@@ -6,11 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
+    private static long lastID = 0;
+    public final long ID;
     private List<OrderEntry> orders;
     private boolean completed = false;
 
     public Order() {
         this.orders = new ArrayList<>();
+        ID = lastID++;
     }
 
     public void complete() {

@@ -59,11 +59,16 @@ public class Pub {
         }
     }
 
-    public void serveOrder(int tableNumber) throws TableDoesNotExistException, TableIsNotOccupiedException {
+    public void serveOrder(int tableNumber, long ID) throws TableDoesNotExistException, TableIsNotOccupiedException {
         try {
             if (!tables[tableNumber])
                 throw new TableIsNotOccupiedException();
-            // TODO: complete the order
+            for(Order order: orders[tableNumber]) {
+                if(order.ID == ID) {
+                    order.complete();
+                    return;
+                }
+            }
         } catch (IndexOutOfBoundsException exception) {
             throw new TableDoesNotExistException();
         }
