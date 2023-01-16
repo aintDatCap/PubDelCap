@@ -6,12 +6,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
-    private int table;
     private List<OrderEntry> orders;
+    private boolean completed = false;
 
-    public Order(int table) {
-        this.table = table;
+    public Order() {
         this.orders = new ArrayList<>();
+    }
+
+    public void complete() {
+        completed = true;
+    }
+
+    public boolean isCompleted() {
+        return completed;
     }
 
     public double getTotalPrice() {
