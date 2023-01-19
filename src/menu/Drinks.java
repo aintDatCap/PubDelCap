@@ -12,7 +12,7 @@ import java.util.*;
 public class Drinks {
     private static HashMap<String, List<MenuEntry>> drinks;
 
-    public Drinks(FileInputStream file) throws IOException {
+    public static void loadDrinks(FileInputStream file) throws IOException {
         Properties properties = new Properties();
         properties.load(file);
 
@@ -26,7 +26,7 @@ public class Drinks {
 
     }
 
-    public void saveDrinks(FileOutputStream file) throws IOException {
+    public static void saveDrinks(FileOutputStream file) throws IOException {
         Properties properties = new Properties();
 
         for(Map.Entry<String, List<MenuEntry>> entry: drinks.entrySet()) {
@@ -36,18 +36,15 @@ public class Drinks {
         properties.store(file, null);
     }
 
-    public void addCategory(String categoryName) {
+    public static void addCategory(String categoryName) {
         if(drinks.containsKey(categoryName))
             return;
         drinks.put(categoryName, new ArrayList<>());
     }
 
-    public void addEntry(String categoryName, MenuEntry entry) {
+    public static void addEntry(String categoryName, MenuEntry entry) {
         drinks.get(categoryName).add(entry);
     }
 
-    public static void main(String[] args) {
-
-    }
 }
 

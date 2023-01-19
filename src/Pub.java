@@ -28,7 +28,7 @@ public class Pub {
             throw new TableDoesNotExistException();
         }
     }
-    
+
     public int findFreeTable() {
         for(int i = 0; i < tables.length; i++)
             if(!tables[i])

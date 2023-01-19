@@ -10,7 +10,7 @@ import java.util.*;
 public class Food {
     private static HashMap<String, List<MenuEntry>> foods;
 
-    public Food(FileInputStream file) throws IOException {
+    public static void loadFood(FileInputStream file) throws IOException {
         Properties properties = new Properties();
         properties.load(file);
         try{
@@ -22,7 +22,7 @@ public class Food {
         }
     }
 
-    public void saveDrinks(FileOutputStream file) throws IOException {
+    public static void saveFood(FileOutputStream file) throws IOException {
         Properties properties = new Properties();
 
         for(Map.Entry<String, List<MenuEntry>> entry: foods.entrySet()) {
@@ -32,13 +32,13 @@ public class Food {
         properties.store(file, null);
     }
 
-    public void addCategory(String categoryName) {
+    public static void addCategory(String categoryName) {
         if(foods.containsKey(categoryName))
             return;
         foods.put(categoryName, new ArrayList<>());
     }
 
-    public void addEntry(String categoryName, MenuEntry entry) {
+    public static void addEntry(String categoryName, MenuEntry entry) {
         foods.get(categoryName).add(entry);
     }
 
