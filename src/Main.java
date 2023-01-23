@@ -1,32 +1,14 @@
-import menu.Food;
-import ui.MenuUI;
-
-import javax.swing.*;
+import menu.Order;
 
 public class Main {
     public static void main(String[] args) {
         Pub pub = new Pub(false);
+        try {
+            pub.occupyTable(1);
+            Order order = new Order();
+            order.
+        } catch (Exception e){
 
-        JFrame window = new JFrame("PubDelCap");
-        window.setSize(1080, 720);
-
-        JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("FILE");
-        JMenu helpMenu = new JMenu("Help");
-        menuBar.add(fileMenu);
-        menuBar.add(helpMenu);
-
-        JMenuItem openOption = new JMenuItem("Open");
-        JMenuItem saveOption = new JMenuItem("Save as");
-        fileMenu.add(openOption);
-        fileMenu.add(saveOption);
-
-        window.add(menuBar);
-
-        window.setVisible(true);
-
-        Food.newMenu();
-
-        MenuUI menu = new MenuUI();
+        }
     }
 }
