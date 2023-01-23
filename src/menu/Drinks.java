@@ -4,36 +4,27 @@ package menu;
 
 import menu.entries.MenuEntry;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Drinks {
     private static HashMap<String, List<MenuEntry>> drinks;
 
-    public static void loadDrinks(FileInputStream file) throws IOException {
-        Properties properties = new Properties();
-        properties.load(file);
-
+    public static void loadDrinks(String fileName) throws IOException {
         try {
-            for(String key: properties.stringPropertyNames()) {
-                drinks.put(key, (List<MenuEntry>) properties.get(key));
-            }
-        } catch (ClassCastException exception) {
-            drinks = new HashMap<>();
+            ObjectInputStream file = new ObjectInputStream(new FileInputStream(fileName));
+            drinks = (HashMap<String, List<MenuEntry>>) file.readObject();
+            file.close();
+        } catch (Exception exception) {
+            Drinks.newMenu();
         }
 
     }
 
-    public static void saveDrinks(FileOutputStream file) throws IOException {
-        Properties properties = new Properties();
-
-        for(Map.Entry<String, List<MenuEntry>> entry: drinks.entrySet()) {
-            properties.put(entry.getKey(), entry.getValue());
-        }
-
-        properties.store(file, null);
+    public static void saveDrinks(String fileName) throws IOException {
+        ObjectOutputStream file = new ObjectOutputStream(new FileOutputStream(fileName));
+        file.writeObject(drinks);
+        file.close();
     }
 
     public static void addCategory(String categoryName) {

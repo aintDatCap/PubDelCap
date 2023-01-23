@@ -1,6 +1,8 @@
 package menu.entries;
 
-public final class MenuEntry {
+import java.io.Serializable;
+
+public final class MenuEntry implements Serializable {
     public double price;
     public String name;
 

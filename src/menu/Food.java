@@ -2,30 +2,26 @@ package menu;
 
 import menu.entries.MenuEntry;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Food {
     public static HashMap<String, List<MenuEntry>> foods;
 
-    public static void loadFood(FileInputStream file) throws IOException {
-        Properties properties = new Properties();
-        properties.load(file);
-        try{
-            for(String key: properties.stringPropertyNames()) {
-                foods.put(key, (List<MenuEntry>) properties.get(key));
-            }
-        } catch (ClassCastException exception) {
-            foods = new HashMap<>();
+    public static void loadFood(String fileName) {
+        try {
+            ObjectInputStream file = new ObjectInputStream(new FileInputStream(fileName));
+            foods = (HashMap<String, List<MenuEntry>>) file.readObject();
+            file.close();
+        } catch (Exception exception) {
+            Food.newMenu();
         }
     }
 
-    public static void saveFood(FileOutputStream file) throws IOException {
-        Properties properties = new Properties();
-        properties.putAll(foods);
-        properties.store(file, null);
+    public static void saveFood(String fileName) throws IOException {
+        ObjectOutputStream file = new ObjectOutputStream(new FileOutputStream(fileName));
+        file.writeObject(foods);
+        file.close();
     }
 
     public static void addCategory(String categoryName) {

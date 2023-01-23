@@ -12,8 +12,7 @@ public class Main {
         MenuEntry bigMac = new MenuEntry(5, "BigMac");
         Food.addEntry("Panini", bigMac);
         try {
-            FileOutputStream foodMenuFile = new FileOutputStream("food.menu");
-            Food.saveFood(foodMenuFile);
+            Food.saveFood("food.menu");
             pub.occupyTable(1);
 
 
