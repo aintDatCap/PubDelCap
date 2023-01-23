@@ -10,7 +10,7 @@ import java.util.*;
 public class Drinks {
     private static HashMap<String, List<MenuEntry>> drinks;
 
-    public static void loadDrinks(String fileName) throws IOException {
+    public static void loadDrinks(String fileName) {
         try {
             ObjectInputStream file = new ObjectInputStream(new FileInputStream(fileName));
             drinks = (HashMap<String, List<MenuEntry>>) file.readObject();
@@ -37,6 +37,13 @@ public class Drinks {
         drinks.get(categoryName).add(entry);
     }
 
+    public static void removeCategory(String categoryName) {
+        drinks.remove(categoryName);
+    }
+
+    public static void removeEntry(String categoryName, MenuEntry entry) {
+        drinks.get(categoryName).remove(entry);
+    }
     public static void newMenu() {
         drinks = new HashMap<>();
     }
