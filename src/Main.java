@@ -1,10 +1,13 @@
+import menu.Food;
+import ui.MenuUI;
+
 import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
         Pub pub = new Pub(false);
 
-        JFrame window = new JFrame("Menu");
+        JFrame window = new JFrame("PubDelCap");
         window.setSize(1080, 720);
 
         JMenuBar menuBar = new JMenuBar();
@@ -21,5 +24,9 @@ public class Main {
         window.add(menuBar);
 
         window.setVisible(true);
+
+        Food.newMenu();
+
+        MenuUI menu = new MenuUI();
     }
 }

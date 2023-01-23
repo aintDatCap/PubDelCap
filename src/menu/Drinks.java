@@ -46,5 +46,8 @@ public class Drinks {
         drinks.get(categoryName).add(entry);
     }
 
+    public static void newMenu() {
+        drinks = new HashMap<>();
+    }
 }
 

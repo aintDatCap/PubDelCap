@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class Food {
-    private static HashMap<String, List<MenuEntry>> foods;
+    public static HashMap<String, List<MenuEntry>> foods;
 
     public static void loadFood(FileInputStream file) throws IOException {
         Properties properties = new Properties();
@@ -24,11 +24,7 @@ public class Food {
 
     public static void saveFood(FileOutputStream file) throws IOException {
         Properties properties = new Properties();
-
-        for(Map.Entry<String, List<MenuEntry>> entry: foods.entrySet()) {
-            properties.put(entry.getKey(), entry.getValue());
-        }
-
+        properties.putAll(foods);
         properties.store(file, null);
     }
 
@@ -42,7 +38,7 @@ public class Food {
         foods.get(categoryName).add(entry);
     }
 
-    public static void main(String[] args) {
-
+    public static void newMenu() {
+        foods = new HashMap<>();
     }
 }
