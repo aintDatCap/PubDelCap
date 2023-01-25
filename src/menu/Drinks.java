@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.*;
 
 public class Drinks {
-    private static HashMap<String, List<MenuEntry>> drinks;
+    public static HashMap<String, List<MenuEntry>> drinks;
 
     public static void loadDrinks(String fileName) {
         try {
