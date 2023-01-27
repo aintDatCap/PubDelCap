@@ -1,4 +1,5 @@
-import menu.Order;
+import menu.TableOrderings;
+import menu.entries.OrderEntry;
 import menu.exceptions.TableDoesNotExistException;
 import menu.exceptions.TableIsAlreadyOccupiedException;
 import menu.exceptions.TableIsNotOccupiedException;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class Pub {
     private final boolean[] tables; // if the table is occupied, then it is true
-    private List<Order>[] orders;
+    private TableOrderings[] orders;
 
 
     public Pub(boolean isSummer) {
@@ -18,7 +19,7 @@ public class Pub {
         if(isSummer)
             totalTables +=15;
         tables = new boolean[totalTables];
-        orders = new ArrayList[totalTables];
+        orders = new TableOrderings[totalTables];
     }
 
     public boolean isTableOccupied(int tableNumber) throws TableDoesNotExistException {
@@ -50,32 +51,27 @@ public class Pub {
     public void clearTable(int tableNumber) throws TableDoesNotExistException {
         try {
             tables[tableNumber] = false;
-            orders[tableNumber].clear();
+            orders[tableNumber] = null;
         } catch (IndexOutOfBoundsException exception) {
             throw new TableDoesNotExistException();
         }
     }
 
-    public void addOrder(int tableNumber,Order order) throws TableDoesNotExistException, TableIsNotOccupiedException {
+    public void addOrder(int tableNumber, OrderEntry order) throws TableDoesNotExistException, TableIsNotOccupiedException {
         try {
             if(!tables[tableNumber])
                 throw new TableIsNotOccupiedException();
-            orders[tableNumber].add(order);
+            orders[tableNumber].addOrder(order);
         } catch (IndexOutOfBoundsException exception) {
             throw new TableDoesNotExistException();
         }
     }
 
-    public void serveOrder(int tableNumber, long ID) throws TableDoesNotExistException, TableIsNotOccupiedException {
+    public void serveOrder(int tableNumber) throws TableDoesNotExistException, TableIsNotOccupiedException {
         try {
             if (!tables[tableNumber])
                 throw new TableIsNotOccupiedException();
-            for(Order order: orders[tableNumber]) {
-                if(order.ID == ID) {
-                    order.complete();
-                    return;
-                }
-            }
+           orders[tableNumber].lastOrder().complete();
         } catch (IndexOutOfBoundsException exception) {
             throw new TableDoesNotExistException();
         }
@@ -85,7 +81,7 @@ public class Pub {
             double price = 0;
             if (!tables[tableNumber])
                 throw new TableIsNotOccupiedException();
-            for(Order order: orders[tableNumber]) {
+            for(TableOrderings order: orders) {
                 price += order.getTotalPrice();
             }
             return price;

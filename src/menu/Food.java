@@ -1,6 +1,7 @@
 package menu;
 
 import menu.entries.MenuEntry;
+import menu.entries.OrderEntry;
 
 import java.io.*;
 import java.util.*;
@@ -41,5 +42,15 @@ public class Food {
     }
     public static void newMenu() {
         foods = new HashMap<>();
+    }
+
+    public static MenuEntry searchFood(String foodName) {
+        for(String key: foods.keySet()) {
+            for(MenuEntry entry: foods.get(key)) {
+                if(entry.name.equals(foodName))
+                    return entry;
+            }
+        }
+        return null;
     }
 }

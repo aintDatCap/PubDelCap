@@ -1,8 +1,10 @@
 import menu.Drinks;
 import menu.Food;
-import menu.Order;
+import menu.TableOrderings;
 import menu.entries.MenuEntry;
+import menu.entries.OrderEntry;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -11,6 +13,10 @@ public class Main {
 
         int action = 1;
         while(action != 0) {
+
+            try{
+                clearConsole();
+            } catch ( Exception e){ System.out.println(e);}
 
             System.out.println("Quali operazioni vuoi eseguire?");
             System.out.println("1) Stampa tutti i cibi con annesse le categorie");
@@ -57,6 +63,7 @@ public class Main {
                     Food.removeFood(foodName);
                     break;
             }
+
         }
         scanner.close();
     }
@@ -108,9 +115,12 @@ public class Main {
 
                     System.out.print("A che drink vuoi rimuovere ? ");
                     drinksName = scanner.nextLine();
-                    Food.removeFood(drinksName);
+                    //Drinks.removeDrink(drinksName);
                     break;
             }
+            try{
+                clearConsole();
+            } catch ( Exception e){}
         }
         scanner.close();
     }
@@ -134,16 +144,28 @@ public class Main {
 
             switch (action) {
                 case 1:
-                    System.out.println(pub.findFreeTable());
+                    System.out.println("Il tavolo numero "+ pub.findFreeTable()+ " è vuoto");
                     break;
                 case 2:
-                    //da modificare addOrder
+                    System.out.println("Numero tavolo che sta ordinando? ");
+                    int tableNum = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println("Cosa ordinata: ");
+                    String orderedThing = scanner.nextLine();
+
+                    System.out.println("Quantità: ");
+                    int quantity = scanner.nextInt();
+
+                    MenuEntry entry = Food.searchFood(orderedThing);
+                    OrderEntry order = new OrderEntry(entry, quantity);
+                    try {
+                        pub.addOrder(tableNum, order);
+                    } catch (Exception e){}
                     break;
                 case 3:
-                    Order order = new Order();
                     System.out.println("Numero tavolo a cui stai servendo l'ordine? ");
-                    int tableNum = scanner.nextInt();
-                    try{pub.serveOrder(tableNum,order.ID);}
+                    tableNum = scanner.nextInt();
+                    try{pub.serveOrder(tableNum);}
                     catch (Exception e){}
                     break;
                 case 4:
@@ -158,7 +180,11 @@ public class Main {
                     try{pub.clearTable(tableNum);}catch (Exception e){}
                     break;
             }
+            try{
+                clearConsole();
+            } catch ( Exception e){}
         }
+        scanner.close();
     }
 
     public static void main(String[] args) {
@@ -166,7 +192,7 @@ public class Main {
         Drinks.loadDrinks("drinks.menu");
 
         Pub pub = new Pub(false);
-
+        foodMenu();
         orderMenu(pub);
         foodMenu();
         drinksMenu();
@@ -177,4 +203,10 @@ public class Main {
             System.out.println(e);
         }
     }
+
+    public static void clearConsole() throws IOException, InterruptedException {
+        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+    }
 }
+
+
