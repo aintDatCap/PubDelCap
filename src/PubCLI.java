@@ -7,9 +7,8 @@ import menu.exceptions.TableDoesNotExistException;
 import java.util.Scanner;
 
 public class PubCLI {
-
+    private static final Scanner scanner = new Scanner(System.in);
     public static void foodMenu() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Quali operazioni vuoi eseguire?");
         System.out.println("1) Stampa tutti i cibi con annesse le categorie");
         System.out.println("2) Aggiungi un cibo");
@@ -40,7 +39,7 @@ public class PubCLI {
                     scanner.nextLine();
                     System.out.print("A che categoria vuoi aggiungere il cibo? ");
                     String category = scanner.nextLine();
-                    System.out.print("Che cibo vuoi inserire? ");
+                    System.out.print("Come si chiama il cibo? ");
                     String foodName = scanner.nextLine();
                     System.out.print("Che prezzo vuoi assegnargli? ");
                     double price = scanner.nextDouble();
@@ -49,22 +48,21 @@ public class PubCLI {
                 }
                 case 3 -> {
                     scanner.nextLine();
-                    System.out.print("A che cibo vuoi rimuovere ? ");
+                    System.out.print("Nome del cibo da rimuovere: ");
                     String foodName = scanner.nextLine();
                     Food.removeFood(foodName);
                 }
                 default -> {
-                    System.out.println("Azione non valida");
+                    if(action != 0)
+                        System.out.println("Azione non valida");
                 }
             }
 
         } while (action != 0);
-        scanner.close();
     }
 
 
     public static void orderMenu(Pub pub) {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("1) Cerca un tavolo vuoto");
         System.out.println("2) Fai un ordinazione per un tavolo");
         System.out.println("3) Completa un ordine");
@@ -146,12 +144,11 @@ public class PubCLI {
                     }
                 }
                 default -> {
-                    System.out.println("Azione non valida");
+                    if(action != 0)
+                        System.out.println("Azione non valida");
                 }
             }
         } while (action != 0);
-
-        scanner.close();
     }
 
     public static void drinksMenu() {
@@ -200,11 +197,12 @@ public class PubCLI {
                     Drinks.removeDrink(drinkName);
                 }
                 default -> {
-                    System.out.println("Azione non valida");
+                    if(action != 0)
+                        System.out.println("Azione non valida");
                 }
             }
         } while (action != 0);
-        scanner.close();
+
     }
 
     public static void clearConsole() {
@@ -222,7 +220,7 @@ public class PubCLI {
     }
 
     public static void mainMenu() {
-        Scanner scanner = new Scanner(System.in);
+
         Pub pub;
 
         System.out.println("I posti esterni sono disponibili? (S/N) ");
@@ -239,6 +237,7 @@ public class PubCLI {
             System.out.println("1) Accesso al menu dei cibi");
             System.out.println("2) Accesso al menu delle bevande");
             System.out.println("3) Accesso al menu degli ordini");
+            System.out.println("4) Salva il menu");
             System.out.println("0) Termina il programma");
             System.out.print("> ");
 
@@ -257,8 +256,17 @@ public class PubCLI {
                 case 3 -> {
                     orderMenu(pub);
                 }
+                case 4 -> {
+                    try {
+                        Food.saveFood("food.menu");
+                        Drinks.saveDrinks("drinks.menu");
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                }
                 default -> {
-                    System.out.println("Azione non valida");
+                    if(action != 0)
+                        System.out.println("Azione non valida");
                 }
             }
         }while (action != 0);
