@@ -1,22 +1,16 @@
 import menu.Drinks;
 import menu.Food;
-import menu.TableOrderings;
 import menu.entries.MenuEntry;
 import menu.entries.OrderEntry;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
     public static void foodMenu() {
         Scanner scanner = new Scanner(System.in);
 
-        int action = 1;
-        while(action != 0) {
-
-            try{
-                clearConsole();
-            } catch ( Exception e){ System.out.println(e);}
+        int action;
+        do {
 
             System.out.println("Quali operazioni vuoi eseguire?");
             System.out.println("1) Stampa tutti i cibi con annesse le categorie");
@@ -33,19 +27,18 @@ public class Main {
             }
 
             switch (action) {
-                case 1:
-                    for(String key: Food.foods.keySet()) {
+                case 1 -> {
+                    for (String key : Food.foods.keySet()) {
                         System.out.println(key);
-                        for(MenuEntry entry: Food.foods.get(key)) {
-                            System.out.println("\t"+entry.name+", prezzo: "+ entry.price);
+                        for (MenuEntry entry : Food.foods.get(key)) {
+                            System.out.println("\t" + entry.name + ", prezzo: " + entry.price);
                         }
                     }
                     System.out.print("Premere invio per continuare");
                     scanner.nextLine();
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     scanner.nextLine();
-
                     System.out.print("A che categoria vuoi aggiungere il cibo? ");
                     String category = scanner.nextLine();
                     System.out.print("Che cibo vuoi inserire? ");
@@ -53,25 +46,25 @@ public class Main {
                     System.out.print("Che prezzo vuoi assegnargli? ");
                     double price = scanner.nextDouble();
                     Food.addCategory(category);
-                    Food.addEntry(category,new MenuEntry(price, foodName));
-                    break;
-                case 3:
+                    Food.addEntry(category, new MenuEntry(price, foodName));
+                }
+                case 3 -> {
                     scanner.nextLine();
-
                     System.out.print("A che cibo vuoi rimuovere ? ");
-                    foodName = scanner.nextLine();
+                    String foodName = scanner.nextLine();
                     Food.removeFood(foodName);
-                    break;
+                }
             }
 
-        }
+        } while (action != 0);
         scanner.close();
     }
-    public static void drinksMenu(){
+
+    public static void drinksMenu() {
         Scanner scanner = new Scanner(System.in);
 
-        int action = 1;
-        while(action != 0) {
+        int action;
+        do {
 
             System.out.println("Quali operazioni vuoi eseguire?");
             System.out.println("1) Stampa tutti i drinks con annesse le categorie");
@@ -88,53 +81,50 @@ public class Main {
             }
 
             switch (action) {
-                case 1:
-                    for(String key: Drinks.drinks.keySet()) {
+                case 1 -> {
+                    for (String key : Drinks.drinks.keySet()) {
                         System.out.println(key);
-                        for(MenuEntry entry: Drinks.drinks.get(key)) {
-                            System.out.println("\t"+entry.name+", prezzo: "+ entry.price);
+                        for (MenuEntry entry : Drinks.drinks.get(key)) {
+                            System.out.println("\t" + entry.name + ", prezzo: " + entry.price);
                         }
                     }
                     System.out.print("Premere invio per continuare");
                     scanner.nextLine();
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     scanner.nextLine();
-
                     System.out.print("A che categoria vuoi aggiungere il drinks? ");
                     String category = scanner.nextLine();
                     System.out.print("Che drink vuoi inserire? ");
-                    String drinksName = scanner.nextLine();
+                    String drinkName = scanner.nextLine();
                     System.out.print("Che prezzo vuoi assegnargli? ");
                     double price = scanner.nextDouble();
                     Drinks.addCategory(category);
-                    Drinks.addEntry(category,new MenuEntry(price, drinksName));
-                    break;
-                case 3:
+                    Drinks.addEntry(category, new MenuEntry(price, drinkName));
+                }
+                case 3 -> {
                     scanner.nextLine();
-
                     System.out.print("A che drink vuoi rimuovere ? ");
-                    drinksName = scanner.nextLine();
-                    //Drinks.removeDrink(drinksName);
-                    break;
+                    String drinkName = scanner.nextLine();
+                    Drinks.removeDrink(drinkName);
+                }
             }
-            try{
-                clearConsole();
-            } catch ( Exception e){}
-        }
+        } while (action != 0);
         scanner.close();
     }
 
     public static void orderMenu(Pub pub) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("1) Cerca un tavolo vuoto");
-        System.out.println("2) Fai un ordinazione per un tavolo");
-        System.out.println("3) Completa un ordine");
-        System.out.println("4) Calcola il conto di un tavolo");
-        System.out.println("5) Pulisci il tavolo");
-        System.out.print(">");
-        int action = 1;
-        while(action != 0) {
+
+        int action;
+        do {
+            System.out.println("1) Cerca un tavolo vuoto");
+            System.out.println("2) Fai un ordinazione per un tavolo");
+            System.out.println("3) Completa un ordine");
+            System.out.println("4) Calcola il conto di un tavolo");
+            System.out.println("5) Pulisci il tavolo");
+
+            System.out.print(">");
             try {
                 action = scanner.nextInt();
             } catch (Exception e) {
@@ -143,10 +133,10 @@ public class Main {
             }
 
             switch (action) {
-                case 1:
-                    System.out.println("Il tavolo numero "+ pub.findFreeTable()+ " è vuoto");
-                    break;
-                case 2:
+                case 1 -> {
+                    System.out.println("Il tavolo numero " + pub.findFreeTable() + " è vuoto");
+                }
+                case 2 -> {
                     System.out.println("Numero tavolo che sta ordinando? ");
                     int tableNum = scanner.nextInt();
                     scanner.nextLine();
@@ -160,30 +150,36 @@ public class Main {
                     OrderEntry order = new OrderEntry(entry, quantity);
                     try {
                         pub.addOrder(tableNum, order);
-                    } catch (Exception e){}
-                    break;
-                case 3:
+                    } catch (Exception ignored) {
+                    }
+                }
+                case 3 -> {
                     System.out.println("Numero tavolo a cui stai servendo l'ordine? ");
-                    tableNum = scanner.nextInt();
-                    try{pub.serveOrder(tableNum);}
-                    catch (Exception e){}
-                    break;
-                case 4:
+                    int tableNum = scanner.nextInt();
+                    try {
+                        pub.serveOrder(tableNum);
+                    } catch (Exception ignored) {
+                    }
+                }
+                case 4 -> {
                     System.out.println("Numero tavolo che richiede l'ordine? ");
-                    tableNum = scanner.nextInt();
-                    try{System.out.println(pub.bill(tableNum));}
-                    catch (Exception e){}
-                    break;
-                case 5:
+                    int tableNum = scanner.nextInt();
+                    try {
+                        System.out.println(pub.bill(tableNum));
+                    } catch (Exception ignored) {
+                    }
+                }
+                case 5 -> {
                     System.out.println("Che tavolo vuoi pulire? ");
-                    tableNum = scanner.nextInt();
-                    try{pub.clearTable(tableNum);}catch (Exception e){}
-                    break;
+                    int tableNum = scanner.nextInt();
+                    try {
+                        pub.clearTable(tableNum);
+                    } catch (Exception ignored) {
+                    }
+                }
             }
-            try{
-                clearConsole();
-            } catch ( Exception e){}
-        }
+            clearConsole();
+        } while (action != 0);
         scanner.close();
     }
 
@@ -192,10 +188,10 @@ public class Main {
         Drinks.loadDrinks("drinks.menu");
 
         Pub pub = new Pub(false);
-        foodMenu();
+
         orderMenu(pub);
-        foodMenu();
-        drinksMenu();
+
+
         try {
             Food.saveFood("food.menu");
             Drinks.saveDrinks("drinks.menu");
@@ -204,8 +200,19 @@ public class Main {
         }
     }
 
-    public static void clearConsole() throws IOException, InterruptedException {
-        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+
+    public static void clearConsole() {
+        try {
+            String operatingSystem = System.getProperty("os.name");
+
+            if (operatingSystem.contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                new ProcessBuilder("clear").inheritIO().start().waitFor();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }
 

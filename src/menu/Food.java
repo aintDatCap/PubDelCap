@@ -35,13 +35,12 @@ public class Food {
         foods.get(categoryName).add(entry);
     }
 
+
     public static void removeFood(String foodName) {
         for(String key: foods.keySet()) {
-            foods.get(key).removeIf(entry -> entry.name.equals(foodName));
+            if (foods.get(key).removeIf(entry -> entry.name.equals(foodName)))
+                return;
         }
-    }
-    public static void newMenu() {
-        foods = new HashMap<>();
     }
 
     public static MenuEntry searchFood(String foodName) {
@@ -52,5 +51,9 @@ public class Food {
             }
         }
         return null;
+    }
+
+    public static void newMenu() {
+        foods = new HashMap<>();
     }
 }

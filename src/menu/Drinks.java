@@ -41,9 +41,23 @@ public class Drinks {
         drinks.remove(categoryName);
     }
 
-    public static void removeEntry(String categoryName, MenuEntry entry) {
-        drinks.get(categoryName).remove(entry);
+    public static void removeDrink(String drinkName) {
+        for(String key: drinks.keySet()) {
+            if(drinks.get(key).removeIf(entry -> entry.name.equals(drinkName)))
+                return;
+        }
     }
+
+    public static MenuEntry searchDrink(String drinkName) {
+        for(String key: drinks.keySet()) {
+            for(MenuEntry entry: drinks.get(key)) {
+                if(entry.name.equals(drinkName))
+                    return entry;
+            }
+        }
+        return null;
+    }
+
     public static void newMenu() {
         drinks = new HashMap<>();
     }
