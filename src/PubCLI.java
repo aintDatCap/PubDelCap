@@ -134,6 +134,7 @@ public class PubCLI {
 
             try {
                 action = scanner.nextInt();
+                scanner.nextLine();
             } catch (Exception e) {
                 System.out.println("Il comando non è valido");
                 action = 0;
@@ -141,6 +142,7 @@ public class PubCLI {
 
             switch (action) {
                 case 1 -> {
+
                     int tableNumber = pub.findFreeTable();
                     if(tableNumber != -1)
                         System.out.print("\nIl tavolo numero " + tableNumber + " è vuoto");
@@ -200,7 +202,7 @@ public class PubCLI {
 
                             System.out.print("Quantità: ");
                             int quantity = scanner.nextInt();
-
+                            scanner.nextLine();
                             if (quantity <= 0) {
                                 System.out.println("La quantità deve essere positiva");
 
@@ -219,6 +221,8 @@ public class PubCLI {
                 case 4 -> {
                     System.out.println("Numero tavolo a cui stai servendo l'ordine? ");
                     int tableNum = scanner.nextInt() - 1;
+                    scanner.nextLine();
+
                     try {
                         pub.serveOrder(tableNum);
                     } catch (TableDoesNotExistException ignored) {
@@ -232,16 +236,23 @@ public class PubCLI {
                 case 5 -> {
                     System.out.println("Numero tavolo che richiede l'ordine? ");
                     int tableNum = scanner.nextInt() - 1;
-                    try {
-                        System.out.print("\nIl totale è di €"+pub.bill(tableNum));
-                    } catch (Exception ignored) {
+                    scanner.nextLine();
 
+                    try {
+                        System.out.print("\nIl totale è di €"+ pub.bill(tableNum));
+                    } catch (TableDoesNotExistException ignored) {
+                        System.out.print("\nIl tavolo numero " + tableNum + " non esiste");
+                    } catch (TableIsNotOccupiedException ignored) {
+                        System.out.print("\nIl tavolo numero " + tableNum + " non è occupato");
                     }
+
                     waitForEnter();
                 }
                 case 6 -> {
                     System.out.println("Che tavolo vuoi pulire? ");
                     int tableNum = scanner.nextInt() - 1;
+                    scanner.nextLine();
+
                     try {
                         pub.clearTable(tableNum);
                     } catch (Exception ignored) {

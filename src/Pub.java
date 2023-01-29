@@ -37,10 +37,12 @@ public class Pub {
     }
 
     public int findFreeTable() {
-        for(int i = 0; i < tables.length; i++)
-            if(!tables[i])
+
+        for (int i = 0; i < tables.length; i++)
+            if (!tables[i])
                 return i + 1; // To make it more user-friendly
         return -1;
+
     }
 
     public void occupyTable(int tableNumber) throws TableDoesNotExistException, TableIsAlreadyOccupiedException {
@@ -83,16 +85,21 @@ public class Pub {
         }
     }
     public double bill(int tableNumber) throws TableDoesNotExistException, TableIsNotOccupiedException {
+
         try {
             double price = 0;
             if (!tables[tableNumber])
                 throw new TableIsNotOccupiedException();
             for(TableOrderings order: orders) {
+                if(order == null)
+                    continue;
                 price += order.getTotalPrice();
             }
             return price;
         } catch (IndexOutOfBoundsException exception) {
+
             throw new TableDoesNotExistException();
         }
+
     }
 }
