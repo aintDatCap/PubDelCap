@@ -120,18 +120,18 @@ public class PubCLI {
 
 
     public static void orderMenu(Pub pub) {
-        System.out.println("1) Cerca un tavolo vuoto");
-        System.out.println("2) Imposta un tavolo come occupato");
-        System.out.println("3) Fai un ordinazione per un tavolo");
-        System.out.println("4) Completa un ordine");
-        System.out.println("5) Calcola il conto di un tavolo");
-        System.out.println("6) Pulisci il tavolo");
-        System.out.println("0) Chiudi il menu");
-
         int action;
         do {
-
+            System.out.println("1) Cerca un tavolo vuoto");
+            System.out.println("2) Imposta un tavolo come occupato");
+            System.out.println("3) Fai un ordinazione per un tavolo");
+            System.out.println("4) Completa un ordine");
+            System.out.println("5) Calcola il conto di un tavolo");
+            System.out.println("6) Pulisci il tavolo");
+            System.out.println("0) Chiudi il menu");
             System.out.print(">");
+
+
             try {
                 action = scanner.nextInt();
             } catch (Exception e) {
@@ -143,21 +143,23 @@ public class PubCLI {
                 case 1 -> {
                     int tableNumber = pub.findFreeTable();
                     if(tableNumber != -1)
-                        System.out.println("Il tavolo numero " + tableNumber + " è vuoto");
+                        System.out.print("\nIl tavolo numero " + tableNumber + " è vuoto");
                     else
-                        System.out.println("Non ci sono tavoli liberi");
+                        System.out.print("\nNon ci sono tavoli liberi");
+
+                    waitForEnter();
                 }
                 case 2 -> {
-                    System.out.println("Numero del tavolo che si vuole occupare: ");
+                    System.out.print("Numero del tavolo che si vuole occupare: ");
 
                     int tableNum = scanner.nextInt() -1;
 
                     try {
                         pub.occupyTable(tableNum);
                     } catch (TableIsAlreadyOccupiedException ignored){
-                        System.out.println("Il tavolo numero "+(tableNum+1)+" è già stato occupato");
+                        System.out.print("\nIl tavolo numero "+(tableNum+1)+" è già stato occupato");
                     } catch (TableDoesNotExistException ignored) {
-                        System.out.println("Il tavolo numero "+(tableNum+1)+" non esiste");
+                        System.out.print("\nIl tavolo numero "+(tableNum+1)+" non esiste");
                     }
                 }
                 case 3 -> {
@@ -168,13 +170,21 @@ public class PubCLI {
 
                     try {
                         if(!pub.isTableOccupied(tableNum))   {
-                            System.out.println("Il tavolo non è stato occupato");
+                            System.out.print("\nIl tavolo non è stato occupato");
+                            waitForEnter();
+                            break;
+                        }
+
+                        if(pub.getTableOrderings(tableNum).hasUnfinishedOrders()) {
+                            System.out.println("L'ultimo ordine del tavolo numero " + tableNum +  " non è stato ancora concluso. Servire tutti gli ordini di un tavolo per aggiungerne altri.");
                             break;
                         }
                     } catch (TableDoesNotExistException ignored) {
-                        System.out.println("Il tavolo non esiste");
+                        System.out.print("\nIl tavolo non esiste");
+                        waitForEnter();
                         break;
                     }
+
                     System.out.print("Quante cose vuole ordinare il tavolo? ");
                     int orderedThingsTotal = scanner.nextInt();
 
@@ -185,7 +195,7 @@ public class PubCLI {
                         MenuEntry entry = MenuEntry.fromName(orderedThing);
 
                         if (entry == null) {
-                            System.out.println("Impossibile trovare il cibo/la bevanda specificato/a");
+                            System.out.print("\nImpossibile trovare il cibo/la bevanda specificato/a");
                         } else {
 
                             System.out.print("Quantità: ");
@@ -193,6 +203,7 @@ public class PubCLI {
 
                             if (quantity <= 0) {
                                 System.out.println("La quantità deve essere positiva");
+
                             }
 
                             OrderEntry order = new OrderEntry(entry, quantity);
@@ -203,6 +214,7 @@ public class PubCLI {
                             }
                         }
                     }
+                    waitForEnter();
                 }
                 case 4 -> {
                     System.out.println("Numero tavolo a cui stai servendo l'ordine? ");
@@ -210,19 +222,22 @@ public class PubCLI {
                     try {
                         pub.serveOrder(tableNum);
                     } catch (TableDoesNotExistException ignored) {
-                        System.out.println("Il tavolo numero " + (tableNum+1) + " non esiste");
+                        System.out.print("\nIl tavolo numero " + (tableNum+1) + " non esiste");
+                        waitForEnter();
                     } catch (TableIsNotOccupiedException ignored) {
-                        System.out.println("Il tavolo non è stato occupato");
+                        System.out.print("\nIl tavolo non è stato occupato");
+                        waitForEnter();
                     }
                 }
                 case 5 -> {
                     System.out.println("Numero tavolo che richiede l'ordine? ");
                     int tableNum = scanner.nextInt() - 1;
                     try {
-                        System.out.println(pub.bill(tableNum));
+                        System.out.print("\nIl totale è di €"+pub.bill(tableNum));
                     } catch (Exception ignored) {
 
                     }
+                    waitForEnter();
                 }
                 case 6 -> {
                     System.out.println("Che tavolo vuoi pulire? ");
@@ -237,6 +252,7 @@ public class PubCLI {
                         System.out.println("Azione non valida");
                 }
             }
+            clearConsole();
         } while (action != 0);
     }
 
@@ -252,6 +268,11 @@ public class PubCLI {
         } catch (Exception ignored) {
 
         }
+    }
+
+    public static void waitForEnter() {
+        System.out.print("\nPremere invio per continuare");
+        scanner.nextLine();
     }
 
     public static void mainMenu() {

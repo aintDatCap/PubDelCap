@@ -28,6 +28,14 @@ public class Pub {
         }
     }
 
+    public TableOrderings getTableOrderings(int tableNumber) throws TableDoesNotExistException {
+        try {
+            return orders[tableNumber];
+        } catch (IndexOutOfBoundsException  exception) {
+            throw new TableDoesNotExistException();
+        }
+    }
+
     public int findFreeTable() {
         for(int i = 0; i < tables.length; i++)
             if(!tables[i])
@@ -40,7 +48,7 @@ public class Pub {
             if(tables[tableNumber])
                 throw new TableIsAlreadyOccupiedException();
             tables[tableNumber] = true;
-
+            orders[tableNumber] = new TableOrderings();
         } catch (IndexOutOfBoundsException exception) {
             throw new TableDoesNotExistException();
         }
