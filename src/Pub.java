@@ -4,14 +4,12 @@ import menu.exceptions.TableDoesNotExistException;
 import menu.exceptions.TableIsAlreadyOccupiedException;
 import menu.exceptions.TableIsNotOccupiedException;
 
-import java.util.ArrayList;
-import java.util.List;
 
 
 
 public class Pub {
     private final boolean[] tables; // if the table is occupied, then it is true
-    private TableOrderings[] orders;
+    private final TableOrderings[] orders;
 
 
     public Pub(boolean isSummer) {
@@ -33,7 +31,7 @@ public class Pub {
     public int findFreeTable() {
         for(int i = 0; i < tables.length; i++)
             if(!tables[i])
-                return i;
+                return i + 1; // To make it more user-friendly
         return -1;
     }
 

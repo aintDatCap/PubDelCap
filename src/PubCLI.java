@@ -3,6 +3,8 @@ import menu.Food;
 import menu.entries.MenuEntry;
 import menu.entries.OrderEntry;
 import menu.exceptions.TableDoesNotExistException;
+import menu.exceptions.TableIsAlreadyOccupiedException;
+import menu.exceptions.TableIsNotOccupiedException;
 
 import java.util.Scanner;
 
@@ -62,95 +64,6 @@ public class PubCLI {
     }
 
 
-    public static void orderMenu(Pub pub) {
-        System.out.println("1) Cerca un tavolo vuoto");
-        System.out.println("2) Fai un ordinazione per un tavolo");
-        System.out.println("3) Completa un ordine");
-        System.out.println("4) Calcola il conto di un tavolo");
-        System.out.println("5) Pulisci il tavolo");
-        System.out.println("0) Chiudi il menu");
-
-        int action;
-        do {
-
-            System.out.print(">");
-            try {
-                action = scanner.nextInt();
-            } catch (Exception e) {
-                System.out.println("Il comando non è valido");
-                action = 0;
-            }
-
-            switch (action) {
-                case 1 -> {
-                    int tableNumber = pub.findFreeTable();
-                    if(tableNumber != -1)
-                        System.out.println("Il tavolo numero " + tableNumber + " è vuoto");
-                    else
-                        System.out.println("Non ci sono tavoli liberi");
-                }
-                case 2 -> {
-                    System.out.print("Numero del tavolo che sta ordinando: ");
-
-                    int tableNum = scanner.nextInt();
-                    scanner.nextLine();
-
-                    try {
-                        if(pub.isTableOccupied(tableNum))   {
-                            System.out.println("Il tavolo è gia stato occupato");
-                            break;
-                        }
-                    } catch (TableDoesNotExistException ignored) {
-                        System.out.println("Il tavolo non esiste");
-                    }
-
-                    System.out.print("Cosa ordinata: ");
-                    String orderedThing = scanner.nextLine();
-
-
-                    System.out.print("Quantità: ");
-                    int quantity = scanner.nextInt();
-
-                    MenuEntry entry = Food.searchFood(orderedThing);
-                    OrderEntry order = new OrderEntry(entry, quantity);
-
-                    try {
-                        pub.addOrder(tableNum, order);
-                    } catch (Exception ignored) {
-                    }
-                }
-                case 3 -> {
-                    System.out.println("Numero tavolo a cui stai servendo l'ordine? ");
-                    int tableNum = scanner.nextInt();
-                    try {
-                        pub.serveOrder(tableNum);
-                    } catch (Exception ignored) {
-                    }
-                }
-                case 4 -> {
-                    System.out.println("Numero tavolo che richiede l'ordine? ");
-                    int tableNum = scanner.nextInt();
-                    try {
-                        System.out.println(pub.bill(tableNum));
-                    } catch (Exception ignored) {
-                    }
-                }
-                case 5 -> {
-                    System.out.println("Che tavolo vuoi pulire? ");
-                    int tableNum = scanner.nextInt();
-                    try {
-                        pub.clearTable(tableNum);
-                    } catch (Exception ignored) {
-                    }
-                }
-                default -> {
-                    if(action != 0)
-                        System.out.println("Azione non valida");
-                }
-            }
-        } while (action != 0);
-    }
-
     public static void drinksMenu() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Quali operazioni vuoi eseguire?");
@@ -205,6 +118,128 @@ public class PubCLI {
 
     }
 
+
+    public static void orderMenu(Pub pub) {
+        System.out.println("1) Cerca un tavolo vuoto");
+        System.out.println("2) Imposta un tavolo come occupato");
+        System.out.println("3) Fai un ordinazione per un tavolo");
+        System.out.println("4) Completa un ordine");
+        System.out.println("5) Calcola il conto di un tavolo");
+        System.out.println("6) Pulisci il tavolo");
+        System.out.println("0) Chiudi il menu");
+
+        int action;
+        do {
+
+            System.out.print(">");
+            try {
+                action = scanner.nextInt();
+            } catch (Exception e) {
+                System.out.println("Il comando non è valido");
+                action = 0;
+            }
+
+            switch (action) {
+                case 1 -> {
+                    int tableNumber = pub.findFreeTable();
+                    if(tableNumber != -1)
+                        System.out.println("Il tavolo numero " + tableNumber + " è vuoto");
+                    else
+                        System.out.println("Non ci sono tavoli liberi");
+                }
+                case 2 -> {
+                    System.out.println("Numero del tavolo che si vuole occupare: ");
+
+                    int tableNum = scanner.nextInt() -1;
+
+                    try {
+                        pub.occupyTable(tableNum);
+                    } catch (TableIsAlreadyOccupiedException ignored){
+                        System.out.println("Il tavolo numero "+(tableNum+1)+" è già stato occupato");
+                    } catch (TableDoesNotExistException ignored) {
+                        System.out.println("Il tavolo numero "+(tableNum+1)+" non esiste");
+                    }
+                }
+                case 3 -> {
+                    System.out.print("Numero del tavolo che sta ordinando: ");
+
+                    int tableNum = scanner.nextInt() - 1;
+                    scanner.nextLine();
+
+                    try {
+                        if(!pub.isTableOccupied(tableNum))   {
+                            System.out.println("Il tavolo non è stato occupato");
+                            break;
+                        }
+                    } catch (TableDoesNotExistException ignored) {
+                        System.out.println("Il tavolo non esiste");
+                        break;
+                    }
+                    System.out.print("Quante cose vuole ordinare il tavolo? ");
+                    int orderedThingsTotal = scanner.nextInt();
+
+                    scanner.nextLine();
+                    for(int i = 0; i < orderedThingsTotal; i++) {
+                        System.out.print("Cosa ordinata: ");
+                        String orderedThing = scanner.nextLine();
+                        MenuEntry entry = MenuEntry.fromName(orderedThing);
+
+                        if (entry == null) {
+                            System.out.println("Impossibile trovare il cibo/la bevanda specificato/a");
+                        } else {
+
+                            System.out.print("Quantità: ");
+                            int quantity = scanner.nextInt();
+
+                            if (quantity <= 0) {
+                                System.out.println("La quantità deve essere positiva");
+                            }
+
+                            OrderEntry order = new OrderEntry(entry, quantity);
+
+                            try {
+                                pub.addOrder(tableNum, order);
+                            } catch (Exception ignored) {
+                            }
+                        }
+                    }
+                }
+                case 4 -> {
+                    System.out.println("Numero tavolo a cui stai servendo l'ordine? ");
+                    int tableNum = scanner.nextInt() - 1;
+                    try {
+                        pub.serveOrder(tableNum);
+                    } catch (TableDoesNotExistException ignored) {
+                        System.out.println("Il tavolo numero " + (tableNum+1) + " non esiste");
+                    } catch (TableIsNotOccupiedException ignored) {
+                        System.out.println("Il tavolo non è stato occupato");
+                    }
+                }
+                case 5 -> {
+                    System.out.println("Numero tavolo che richiede l'ordine? ");
+                    int tableNum = scanner.nextInt() - 1;
+                    try {
+                        System.out.println(pub.bill(tableNum));
+                    } catch (Exception ignored) {
+
+                    }
+                }
+                case 6 -> {
+                    System.out.println("Che tavolo vuoi pulire? ");
+                    int tableNum = scanner.nextInt() - 1;
+                    try {
+                        pub.clearTable(tableNum);
+                    } catch (Exception ignored) {
+                    }
+                }
+                default -> {
+                    if(action != 0)
+                        System.out.println("Azione non valida");
+                }
+            }
+        } while (action != 0);
+    }
+
     public static void clearConsole() {
         try {
             String operatingSystem = System.getProperty("os.name");
@@ -255,13 +290,14 @@ public class PubCLI {
                 }
                 case 3 -> {
                     orderMenu(pub);
+                    clearConsole();
                 }
                 case 4 -> {
                     try {
                         Food.saveFood("food.menu");
                         Drinks.saveDrinks("drinks.menu");
                     } catch (Exception e) {
-                        System.out.println(e);
+                        System.out.println("Salvataggio dei menù non riuscito");
                     }
                 }
                 default -> {

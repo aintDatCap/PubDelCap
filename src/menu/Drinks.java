@@ -16,6 +16,7 @@ public class Drinks {
             drinks = (HashMap<String, List<MenuEntry>>) file.readObject();
             file.close();
         } catch (Exception exception) {
+            System.out.println("Unable to open drinks menu at " + fileName);
             Drinks.newMenu();
         }
 
