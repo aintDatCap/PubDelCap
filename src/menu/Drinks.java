@@ -1,11 +1,12 @@
 package menu;
 
 
-
 import menu.entries.MenuEntry;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Drinks {
     public static HashMap<String, List<MenuEntry>> drinks;
@@ -29,7 +30,7 @@ public class Drinks {
     }
 
     public static void addCategory(String categoryName) {
-        if(drinks.containsKey(categoryName))
+        if (drinks.containsKey(categoryName))
             return;
         drinks.put(categoryName, new ArrayList<>());
     }
@@ -43,16 +44,18 @@ public class Drinks {
     }
 
     public static void removeDrink(String drinkName) {
-        for(String key: drinks.keySet()) {
-            if(drinks.get(key).removeIf(entry -> entry.name.equals(drinkName)))
+        for (String key : drinks.keySet()) {
+            if (drinks.get(key).removeIf(entry -> entry.name.equals(drinkName)))
                 return;
         }
     }
 
     public static MenuEntry searchDrink(String drinkName) {
-        for(String key: drinks.keySet()) {
-            for(MenuEntry entry: drinks.get(key)) {
-                if(entry.name.equals(drinkName))
+        for (String key : drinks.keySet()) {
+            for (MenuEntry entry : drinks.get(key)) {
+                if (entry == null)
+                    continue;
+                if (entry.name.equals(drinkName))
                     return entry;
             }
         }

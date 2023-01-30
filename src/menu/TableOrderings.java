@@ -29,13 +29,13 @@ public class TableOrderings {
     }
 
     public OrderEntry lastOrder() {
-        if(orders.size() == 0)
+        if (orders.size() == 0)
             return null;
         return orders.get(orders.size() - 1);
     }
 
     public boolean hasUnfinishedOrders() {
-        if(lastOrder() == null)
+        if (lastOrder() == null)
             return false;
         return !lastOrder().isCompleted();
     }

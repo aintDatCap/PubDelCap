@@ -1,10 +1,11 @@
 package menu;
 
 import menu.entries.MenuEntry;
-import menu.entries.OrderEntry;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Food {
     public static HashMap<String, List<MenuEntry>> foods;
@@ -27,7 +28,7 @@ public class Food {
     }
 
     public static void addCategory(String categoryName) {
-        if(foods.containsKey(categoryName))
+        if (foods.containsKey(categoryName))
             return;
         foods.put(categoryName, new ArrayList<>());
     }
@@ -38,16 +39,18 @@ public class Food {
 
 
     public static void removeFood(String foodName) {
-        for(String key: foods.keySet()) {
+        for (String key : foods.keySet()) {
             if (foods.get(key).removeIf(entry -> entry.name.equals(foodName)))
                 return;
         }
     }
 
     public static MenuEntry searchFood(String foodName) {
-        for(String key: foods.keySet()) {
-            for(MenuEntry entry: foods.get(key)) {
-                if(entry.name.equals(foodName))
+        for (String key : foods.keySet()) {
+            for (MenuEntry entry : foods.get(key)) {
+                if (entry == null)
+                    continue;
+                if (entry.name.equals(foodName))
                     return entry;
             }
         }

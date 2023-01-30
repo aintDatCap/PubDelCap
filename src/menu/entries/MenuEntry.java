@@ -16,7 +16,7 @@ public final class MenuEntry implements Serializable {
 
     public static MenuEntry fromName(String entryName) {
         MenuEntry entry = Food.searchFood(entryName);
-        if(entry == null) {
+        if (entry == null) {
             entry = Drinks.searchDrink(entryName);
         }
         return entry;
